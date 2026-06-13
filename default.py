@@ -1295,15 +1295,25 @@ def resolve(title, url, mediatype):
                         play_item.setProperty("inputstream", "inputstream.adaptive")
                         play_item.setProperty("inputstream.adaptive.manifest_type", "mpd")
                         play_item.setMimeType("application/dash+xml")
-                        play_item.setProperty(
-                            "inputstream.adaptive.license_type",
-                            "com.widevine.alpha"
-                        )
-                        play_item.setProperty(
-                            "inputstream.adaptive.license_key",
-                            play_entry["drm"]["widevine"]["url"] + "||R{SSM}|"
-                        )
                         play_item.setContentLookup(False)
+
+                        if play_entry and "drm" in play_entry:
+                            widevine_url = play_entry["drm"]["widevine"]["url"]
+                            play_item.setProperty(
+                                "inputstream.adaptive.license_type",
+                                "com.widevine.alpha"
+                            )
+                            play_item.setProperty(
+                                "inputstream.adaptive.license_key",
+                                widevine_url
+                                + "|User-Agent=" + client.get_user_agent
+                                + "&Referer=https://player.mediaklikk.hu/"
+                                + "&Origin=https://player.mediaklikk.hu"
+                                + "|R{SSM}|"
+                            )
+
+                            xbmc.log(f"widevine_url: {widevine_url}", xbmc.LOGERROR)
+
             except Exception as e:
                 xbmc.log(f"TV Error: {e}", xbmc.LOGINFO)
 
