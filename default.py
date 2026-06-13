@@ -1303,20 +1303,23 @@ def resolve(title, url, mediatype):
                                 "inputstream.adaptive.license_type",
                                 "com.widevine.alpha",
                             )
-                            license_key = (widevine_url
-                                + "|User-Agent=" + client.get_user_agent()
-                                + "&Referer=https://player.mediaklikk.hu/"
-                                + "&Origin=https://player.mediaklikk.hu"
-                                + "&Content-Type=application/x-www-form-urlencoded"
-                                + "|R|"
-                            )
+                            license_key = widevine_url
+                            # license_key = (widevine_url
+                            #     + "|User-Agent=" + client.get_user_agent()
+                            #     + "&Referer=https://player.mediaklikk.hu/"
+                            #     + "&Origin=https://player.mediaklikk.hu"
+                            #     + "&Content-Type=application/x-www-form-urlencoded"
+                            #     + "|R|"
+                            # )
                             play_item.setProperty(
                                 "inputstream.adaptive.license_key",
-                                widevine_url,
+                                license_key,
                             )
 
                             xbmc.log(f"widevine_url: {widevine_url}", xbmc.LOGERROR)
                             xbmc.log(f"license_key: {license_key}", xbmc.LOGERROR)
+
+                            xbmc.log(json.dumps(norm_json["playlist"], indent=2), xbmc.LOGERROR)
 
             except Exception as e:
                 xbmc.log(f"TV Error: {e}", xbmc.LOGINFO)
