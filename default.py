@@ -1312,7 +1312,7 @@ def resolve(title, url, mediatype):
                             )
                             play_item.setProperty(
                                 "inputstream.adaptive.license_key",
-                                license_key,
+                                widevine_url,
                             )
 
                             xbmc.log(f"widevine_url: {widevine_url}", xbmc.LOGERROR)
