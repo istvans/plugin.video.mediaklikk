@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import, unicode_literals
+import base64
 from kodi_six import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 import re, os, json, sys
 from resources.lib import client
@@ -1303,6 +1304,11 @@ def resolve(title, url, mediatype):
                                 "inputstream.adaptive.license_type",
                                 "com.widevine.alpha",
                             )
+
+                            cert_resp = requests.post(widevine_url, data=b"\x08\x04")
+                            server_cert_b64 = base64.b64encode(cert_resp.content).decode("ascii")
+                            play_item.setProperty("inputstream.adaptive.server_certificate", server_cert_b64)
+
                             license_key = widevine_url + r"||R{SSM}|"
                             # license_key = (widevine_url
                             #     + "|User-Agent=" + client.get_user_agent()
