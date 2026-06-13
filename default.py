@@ -1307,7 +1307,7 @@ def resolve(title, url, mediatype):
                                 + "|User-Agent=" + client.get_user_agent()
                                 + "&Referer=https://player.mediaklikk.hu/"
                                 + "&Origin=https://player.mediaklikk.hu"
-                                + "|R{SSM}|"
+                                + "|R|"
                             )
                             play_item.setProperty(
                                 "inputstream.adaptive.license_key",
