@@ -1292,10 +1292,10 @@ def resolve(title, url, mediatype):
                         xbmc.log(f"streamURL: {streamURL}", xbmc.LOGINFO)
                         xbmc.log(f"norm_json: {json.dumps(norm_json, indent=2)}", xbmc.LOGERROR)
 
-                        play_item.setProperty("inputstream", "inputstream.adaptive")
-                        play_item.setProperty("inputstream.adaptive.manifest_type", "mpd")
-                        play_item.setMimeType("application/dash+xml")
-                        play_item.setContentLookup(False)
+                        # play_item.setProperty("inputstream", "inputstream.adaptive")
+                        # play_item.setProperty("inputstream.adaptive.manifest_type", "mpd")
+                        # play_item.setMimeType("application/dash+xml")
+                        # play_item.setContentLookup(False)
 
                         if play_entry and "drm" in play_entry:
                             widevine_url = play_entry["drm"]["widevine"]["url"]
