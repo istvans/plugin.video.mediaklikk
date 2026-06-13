@@ -1306,7 +1306,7 @@ def resolve(title, url, mediatype):
                             play_item.setProperty(
                                 "inputstream.adaptive.license_key",
                                 widevine_url
-                                + "|User-Agent=" + client.get_user_agent
+                                + "|" + f"User-Agent={client.get_user_agent}"
                                 + "&Referer=https://player.mediaklikk.hu/"
                                 + "&Origin=https://player.mediaklikk.hu"
                                 + "|R{SSM}|"
