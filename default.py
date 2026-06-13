@@ -1213,6 +1213,10 @@ def resolve(title, url, mediatype):
     play_item = xbmcgui.ListItem()
     streamURL = None
 
+    xbmc.log(f"MEDIAKLIKK DEBUG title={title}", xbmc.LOGERROR)
+    xbmc.log(f"MEDIAKLIKK DEBUG url={url}", xbmc.LOGERROR)
+    xbmc.log(f"MEDIAKLIKK DEBUG mediatype={mediatype}", xbmc.LOGERROR)
+
     if '|' in title:
         display_title, original_title = title.split('|')
         display_title = unquote_plus(display_title)
@@ -1270,7 +1274,12 @@ def resolve(title, url, mediatype):
                 return xbmcplugin.setResolvedUrl(_handle, False, listitem=play_item)
         else:
             try:
-                resp = client.request(f'https://player.mediaklikk.hu/playernew/player.php?noflash=yes&video={quote_plus(url)}').text
+                xbmc.log(f"url: {url}", xbmc.LOGINFO)
+                single_slash_url = url.replace("//", "/")
+                req_endpoint = f'https://player.mediaklikk.hu/playernew/player.php?noflash=yes&video={quote_plus(single_slash_url)}'
+                xbmc.log(f"req_endpoint: {req_endpoint}", xbmc.LOGINFO)
+                resp = client.request(req_endpoint).text
+                # xbmc.log(f"resp: {resp}", xbmc.LOGINFO)
                 json_regex_patt = r"setup\((.*?)\);"
                 json_text = re.search(json_regex_patt, resp, re.DOTALL).group(1)
                 norm_json = json.loads(json_text)
@@ -1278,6 +1287,23 @@ def resolve(title, url, mediatype):
                 if norm_json:
                     play_entry = next((x for x in norm_json["playlist"] if "bumper" not in x["file"]), None)
                     streamURL = play_entry["file"] if play_entry and play_entry["type"] == "hls" else norm_json['playlist'][0]['file']
+
+                    if streamURL.lower().endswith(".mpd"):
+                        xbmc.log(f"streamURL: {streamURL}", xbmc.LOGINFO)
+                        xbmc.log(f"norm_json: {json.dumps(norm_json, indent=2)}", xbmc.LOGERROR)
+
+                        play_item.setProperty("inputstream", "inputstream.adaptive")
+                        play_item.setProperty("inputstream.adaptive.manifest_type", "mpd")
+                        play_item.setMimeType("application/dash+xml")
+                        play_item.setProperty(
+                            "inputstream.adaptive.license_type",
+                            "com.widevine.alpha"
+                        )
+                        play_item.setProperty(
+                            "inputstream.adaptive.license_key",
+                            play_entry["drm"]["widevine"]["url"] + "||R{SSM}|"
+                        )
+                        play_item.setContentLookup(False)
             except Exception as e:
                 xbmc.log(f"TV Error: {e}", xbmc.LOGINFO)
 
@@ -1307,6 +1333,7 @@ def addDirectoryItem(name, query, icon=None, context=None, queue=False, isFolder
         item.setInfo(type='video', infoLabels = meta)
     xbmcplugin.addDirectoryItem(handle=_handle, url=url, listitem=item, isFolder=isFolder)
 
+xbmc.log(f"RAW_ARGV2={repr(sys.argv[2])}", xbmc.LOGERROR)
 params = dict(parse_qsl(sys.argv[2][1:]))
 action = params.get('action')
 url = params.get('url')
@@ -1349,6 +1376,7 @@ elif action == 'media_list':
 elif action == 'live' :
     live_channels()
 elif action == 'resolve':
+    xbmc.log(f"title: {title}, url: {url}, mediatype: {mediatype}", xbmc.LOGINFO)
     resolve(title, url, mediatype)
 elif action == 'extr_web_page':
     extr_web_page(id, c_url, c_title, category_name, h1_title, href_link, jpg_link)
