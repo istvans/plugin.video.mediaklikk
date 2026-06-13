@@ -1318,9 +1318,6 @@ def resolve(title, url, mediatype):
 
                             xbmc.log(f"widevine_url: {widevine_url}", xbmc.LOGERROR)
                             xbmc.log(f"license_key: {license_key}", xbmc.LOGERROR)
-
-                            xbmc.log(json.dumps(norm_json["playlist"], indent=2), xbmc.LOGERROR)
-
             except Exception as e:
                 xbmc.log(f"TV Error: {e}", xbmc.LOGINFO)
 
