@@ -1303,7 +1303,7 @@ def resolve(title, url, mediatype):
                                 "inputstream.adaptive.license_type",
                                 "com.widevine.alpha",
                             )
-                            license_key = widevine_url + "|R{{SSM}}|"
+                            license_key = widevine_url + "||R{{SSM}}|"
                             # license_key = (widevine_url
                             #     + "|User-Agent=" + client.get_user_agent()
                             #     + "&Referer=https://player.mediaklikk.hu/"
