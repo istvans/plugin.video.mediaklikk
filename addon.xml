@@ -2,7 +2,6 @@
 <addon id="plugin.video.mediaklikk" name="MédiaKlikk" version="1.2.2" provider-name="Salad Fingers, vargalex, heg">
 	<requires>
 		<import addon="script.module.beautifulsoup4" version="4.6.2"/>
-		<import addon="script.module.resolveurl" version="5.1.00"/>
 		<import addon="xbmc.python" version="3.0.0"/>
 		<import addon="script.module.requests" version="2.22.0"/>
 		<import addon="script.module.requests-cache" />
